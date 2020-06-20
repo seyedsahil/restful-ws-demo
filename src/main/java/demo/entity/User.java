@@ -3,12 +3,13 @@ package demo.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import demo.validation.FieldsEqualConstraint;
 import demo.validation.PasswordConstraint;
@@ -20,7 +21,8 @@ import demo.validation.UsernameConstraint;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GenericGenerator(name = "user_id", strategy = "demo.generator.IdGenerator")
+	@GeneratedValue(generator = "user_id")
 	@Column(name = "user_id")
 	private int id;
 
@@ -37,7 +39,7 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
-	@PasswordConstraint(message = "{{error.field.retypePassword}}")
+	@PasswordConstraint(message = "{error.field.retypePassword}")
 	@Transient
 	private String retypePassword;
 
